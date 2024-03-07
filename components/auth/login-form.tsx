@@ -67,7 +67,8 @@ export const LoginForm: FC = memo(() => {
                     : { type: 'success', message: success }
                 );
             } catch (error: any) {
-                setResponse({ type: 'error', message: 'Something went wrong' });
+                // TODO this is commented  because of the next redirect error getting thrown
+                // setResponse({ type: 'error', message: 'Something went wrong' });
             } finally {
                 form.reset();
             }
