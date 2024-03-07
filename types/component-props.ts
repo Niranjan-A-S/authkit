@@ -25,3 +25,8 @@ export interface IBackButtonProps {
     href: string;
 };
 
+export interface IFormResponseProps {
+    message?: string;
+    type: 'error' | 'success';
+}
+
