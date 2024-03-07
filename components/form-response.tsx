@@ -4,7 +4,7 @@ import { IFormResponseProps } from '@/types/component-props';
 import { CheckCircledIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { FC, memo, useMemo } from 'react';
 
-export const FormResponse: FC<IFormResponseProps> = memo(({ message, type }) => {
+export const FormResponse: FC<IFormResponseProps> = memo(({ response: { message, type } }) => {
 
     const Icon = useMemo(() => (
         type === 'success'
