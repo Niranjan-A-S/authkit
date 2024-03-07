@@ -8,3 +8,20 @@ export interface ILoginButtonProps extends IParentProps {
     mode?: 'modal' | 'redirect';
     asChild?: boolean;
 };
+
+export interface ICardWrapperProps extends IParentProps {
+    headerLabel: string;
+    backButtonLabel: string;
+    backButtonHref: string;
+    showSocial?: boolean;
+}
+
+export interface IHeaderProps {
+    label: string;
+};
+
+export interface IBackButtonProps {
+    label: string;
+    href: string;
+};
+
