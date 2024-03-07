@@ -1,6 +1,6 @@
 'use client';
 
-import { loginAction } from '@/actions/login';
+import { login } from '@/actions/login';
 import { CardWrapper } from '@/components/auth/card-wrapper';
 import { FormResponse } from '@/components/form-response';
 import { Button } from '@/components/ui/button';
@@ -60,11 +60,15 @@ export const LoginForm: FC = memo(() => {
     const onSubmit = useCallback((values: z.infer<typeof LoginSchema>) => {
         setResponse(defaultResponse);
         startTransition(async () => {
-            const { error, success } = await loginAction(values);
-            setResponse(error
-                ? { type: 'error', message: error }
-                : { type: 'success', message: success }
-            );
+            try {
+                const { error, success } = await login(values);
+                setResponse(error
+                    ? { type: 'error', message: error }
+                    : { type: 'success', message: success }
+                );
+            } catch (error: any) {
+                setResponse({ type: 'error', message: error?.message || 'Something went wrong' });
+            }
         });
     }, []);
 
