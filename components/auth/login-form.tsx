@@ -1,17 +1,23 @@
 'use client';
 
+import { loginAction } from '@/actions/login';
 import { CardWrapper } from '@/components/auth/card-wrapper';
+import { FormResponse } from '@/components/form-response';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Placeholder, defaultResponse } from '@/constants';
 import { LoginSchema } from '@/schemas';
+import { IFormResponse } from '@/types/component-props';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FC, memo, useCallback } from 'react';
+import { FC, memo, useCallback, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { FormResponse } from '@/components/form-response';
 
 export const LoginForm: FC = memo(() => {
+
+    const [isPending, startTransition] = useTransition();
+    const [response, setResponse] = useState<IFormResponse>(defaultResponse);
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
@@ -28,12 +34,13 @@ export const LoginForm: FC = memo(() => {
                 <Input
                     {...field}
                     type="email"
-                    placeholder="john.doe@example.com"
+                    placeholder={Placeholder.Email}
+                    disabled={isPending}
                 />
             </FormControl>
             <FormMessage />
         </FormItem>
-    ), []);
+    ), [isPending]);
     const renderPasswordField = useCallback(({ field }: any) => (
         <FormItem>
             <FormLabel>Password</FormLabel>
@@ -41,15 +48,24 @@ export const LoginForm: FC = memo(() => {
                 <Input
                     {...field}
                     type="password"
-                    placeholder="******"
+                    placeholder={Placeholder.Password}
+                    disabled={isPending}
+
                 />
             </FormControl>
             <FormMessage />
         </FormItem>
-    ), []);
+    ), [isPending]);
 
     const onSubmit = useCallback((values: z.infer<typeof LoginSchema>) => {
-        console.log(values);
+        setResponse(defaultResponse);
+        startTransition(async () => {
+            const { error, success } = await loginAction(values);
+            setResponse(error
+                ? { type: 'error', message: error }
+                : { type: 'success', message: success }
+            );
+        });
     }, []);
 
     return (
@@ -77,11 +93,11 @@ export const LoginForm: FC = memo(() => {
                             render={renderPasswordField}
                         />
                     </div>
-                    <FormResponse type="success" />
-                    <FormResponse type="error" />
+                    <FormResponse response={response} />
                     <Button
                         className="w-full"
                         type="submit"
+                        disabled={isPending}
                     >
                         Login
                     </Button>
