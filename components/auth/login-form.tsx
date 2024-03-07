@@ -67,10 +67,12 @@ export const LoginForm: FC = memo(() => {
                     : { type: 'success', message: success }
                 );
             } catch (error: any) {
-                setResponse({ type: 'error', message: error?.message || 'Something went wrong' });
+                setResponse({ type: 'error', message: 'Something went wrong' });
+            } finally {
+                form.reset();
             }
         });
-    }, []);
+    }, [form]);
 
     return (
     <CardWrapper
