@@ -23,6 +23,8 @@ export const login = async (value: z.infer<typeof LoginSchema>) => {
             switch (error.type) {
                 case 'CredentialsSignin':
                     return { error: 'Invalid credentials' };
+                case 'AccessDenied':
+                    return { error: 'Verify your email!' };
                 default:
                     return { error: 'Something went wrong!' };
             }
