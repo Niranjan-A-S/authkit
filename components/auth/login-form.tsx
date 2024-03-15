@@ -10,14 +10,26 @@ import { Placeholder, defaultResponse } from '@/constants';
 import { LoginSchema } from '@/schemas';
 import { IFormResponse } from '@/types/component-props';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FC, memo, useCallback, useState, useTransition } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { FC, memo, useCallback, useMemo, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 export const LoginForm: FC = memo(() => {
+    const searchParams = useSearchParams();
+    const urlError = useMemo(() => (searchParams.get('error') === 'OAuthAccountNotLinked'
+        ? 'Email already in use with different provider!'
+        : ''), [searchParams]);
 
     const [isPending, startTransition] = useTransition();
-    const [response, setResponse] = useState<IFormResponse>(defaultResponse);
+    const [response, setResponse] = useState<IFormResponse>(
+        urlError
+            ? {
+                type: 'error',
+                message: urlError
+            }
+            : defaultResponse
+    );
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
