@@ -8,10 +8,18 @@ export const {
     handlers: { GET, POST },
     auth, signIn, signOut
 } = NextAuth({
+    pages: {
+        error: '/auth/error'
+        //TODO this is not working
+    },
     callbacks: {
         async signIn({ user }) {
             const existingUser = user.id && await getUserById(user.id);
-            return !existingUser || !existingUser.id;
+            if (!existingUser || !existingUser.emailVerified) {
+                //TODO: change this to false
+                return true;
+            }
+            return true;
         },
         async session({ session, token }) {
             if (session.user && token.sub) {
@@ -32,6 +40,18 @@ export const {
             token.role = existingUser.role;
 
             return token;
+        }
+    },
+    events: {
+        async linkAccount({ user }) {
+            await db.user.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    emailVerified: new Date()
+                }
+            });
         }
     },
     adapter: PrismaAdapter(db),
