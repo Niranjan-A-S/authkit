@@ -3,6 +3,7 @@
 import { db } from '@/lib/db';
 import { RegisterSchema } from '@/schemas';
 import { getHashedPassword } from '@/utils/hash';
+import { sendVerificationEmail } from '@/utils/mail';
 import { getUserByEmail } from '@/utils/user';
 import { generateVerificationToken } from '@/utils/verification-token';
 import z from 'zod';
@@ -32,5 +33,8 @@ export const register = async (value: z.infer<typeof RegisterSchema>) => {
 
     const verificationToken = await generateVerificationToken(email);
 
-    return { success: 'Confirmation email sent!' };
+    const { error } = await sendVerificationEmail(verificationToken?.email!, verificationToken?.token!);//TODO: fix this types
+    if (error) return { error: 'Failed to send verification email.' };
+
+    return { success: 'Confirmation email sent.' };
 };
