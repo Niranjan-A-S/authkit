@@ -2,7 +2,7 @@ import authConfig from '@/auth.config';
 import { db } from '@/lib/db';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import NextAuth from 'next-auth';
-import { getUserById } from './utils/user';
+import { getUserByEmail, getUserById } from './utils/user';
 
 export const {
     handlers: { GET, POST },
@@ -13,12 +13,16 @@ export const {
         //TODO this is not working
     },
     callbacks: {
-        async signIn({ user }) {
-            const existingUser = user.id && await getUserById(user.id);
+        async signIn({ account, user }) {
+            if (account?.provider !== 'credentials') return true;
+
+            const existingUser = await getUserById(user.id!); //todo fix this type
+            //Prevent sign in if email is not verified
             if (!existingUser || !existingUser.emailVerified) {
-                //TODO: change this to false
-                return true;
+                return false;
             }
+
+            //TODO Add 2FA check
             return true;
         },
         async session({ session, token }) {
