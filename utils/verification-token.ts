@@ -51,7 +51,6 @@ export const generateVerificationToken = async (email: string) => {
     const token = uuidV4();
 
     const existingToken = await getVerificationTokenByEmail(email);
-
     if (existingToken) await removeVerificationToken(existingToken.id);
 
     return await addVerificationTokenToDB(email, token);

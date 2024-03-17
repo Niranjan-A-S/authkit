@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db';
 import { RegisterSchema } from '@/schemas';
-import { getHashedPassword } from '@/utils/hash';
+import { generateHashedPassword } from '@/utils/hash';
 import { sendVerificationEmail } from '@/utils/mail';
 import { getUserByEmail } from '@/utils/user';
 import { generateVerificationToken } from '@/utils/verification-token';
@@ -16,7 +16,7 @@ export const register = async (value: z.infer<typeof RegisterSchema>) => {
     };
 
     const { email, password, name } = validatedFields.data;
-    const hashedPassword = await getHashedPassword(password);
+    const hashedPassword = await generateHashedPassword(password);
 
     const existingUser = await getUserByEmail(email);
     if (existingUser) return {
