@@ -34,7 +34,7 @@ export const deleteTwoFactorToken = async (tokenId: string) => {
 };
 
 export const addTwoFactorTokenToDB = async (email: string, token: string) => {
-    const expires = new Date(new Date().getTime() + (1000 * 3600));
+    const expires = new Date(new Date().getTime() + (5 * 60 * 3600));
 
     return await db.twoFactorToken.create({
         data: {
