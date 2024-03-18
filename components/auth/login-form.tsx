@@ -22,6 +22,7 @@ export const LoginForm: FC = memo(() => {
         ? 'Email already in use with different provider!'
         : ''), [searchParams]);
 
+    const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
     const [isPending, startTransition] = useTransition();
     const [response, setResponse] = useState<IFormResponse>(
         urlError
@@ -34,10 +35,9 @@ export const LoginForm: FC = memo(() => {
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
-        //TODO: remove this default values later later
         defaultValues: {
-            email: 'niranjan0881@gmail.com',
-            password: '123456'
+            email: '',
+            password: ''
         }
     });
 
@@ -55,6 +55,7 @@ export const LoginForm: FC = memo(() => {
             <FormMessage />
         </FormItem>
     ), [isPending]);
+
     const renderPasswordField = useCallback(({ field }: any) => (
         <FormItem>
             <FormLabel>Password</FormLabel>
@@ -79,20 +80,41 @@ export const LoginForm: FC = memo(() => {
         </FormItem>
     ), [isPending]);
 
+    const renderCodeInput = useCallback(({ field }: any) => (
+        <FormItem>
+            <FormLabel>Two Factor Code</FormLabel>
+            <FormControl>
+                <Input
+                    {...field}
+                    placeholder={Placeholder.Code}
+                    disabled={isPending}
+                />
+            </FormControl>
+            <FormMessage />
+        </FormItem>
+    ), [isPending]);
+
     const onSubmit = useCallback((values: z.infer<typeof LoginSchema>) => {
         setResponse(defaultResponse);
         startTransition(async () => {
             try {
-                const { error, success } = await login(values);
-                setResponse(error
-                    ? { type: 'error', message: error }
-                    : { type: 'success', message: success }
-                );
+                const { error, success, twoFactor } = await login(values);
+                if (error) {
+                    form.reset();
+                    setResponse({ type: 'error', message: error });
+                }
+                if (success) {
+                    form.reset();
+                    setResponse({ type: 'success', message: success });
+                }
+                if (twoFactor) {
+                    //NOTE: This step is very important and we should not reset the form from here
+                    setResponse({ type: 'success', message: twoFactor });
+                    setShowTwoFactor(true);
+                };
             } catch (error: any) {
                 // TODO this is commented  because of the next redirect error getting thrown
                 // setResponse({ type: 'error', message: 'Something went wrong' });
-            } finally {
-                form.reset();
             }
         });
     }, [form]);
@@ -111,16 +133,28 @@ export const LoginForm: FC = memo(() => {
                     className="space-y-6"
                 >
                     <div className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={renderEmailField}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={renderPasswordField}
-                        />
+                        {showTwoFactor && (
+                            <FormField
+                                control={form.control}
+                                name="code"
+                                render={renderCodeInput}
+                            />
+                        )}
+                        {!showTwoFactor
+                            && (
+                                <>
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={renderEmailField}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={renderPasswordField}
+                                />
+                                </>
+                            )}
                     </div>
                     <FormResponse response={response} />
                     <Button
@@ -128,7 +162,7 @@ export const LoginForm: FC = memo(() => {
                         type="submit"
                         disabled={isPending}
                     >
-                        Login
+                        {showTwoFactor ? 'Confirm' : 'Login'}
                     </Button>
                 </form>
             </Form>

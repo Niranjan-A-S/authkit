@@ -8,5 +8,6 @@ export const defaultResponse: IFormResponse = {
 export enum Placeholder {
     Email = 'john.doe@example.com',
     Password = '********',
-    Name = 'John Doe'
+    Name = 'John Doe',
+    Code = '123456'
 }
