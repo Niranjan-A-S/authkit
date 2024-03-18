@@ -34,9 +34,10 @@ export const LoginForm: FC = memo(() => {
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
+        //TODO: remove this default values later later
         defaultValues: {
-            email: 'test@test.com',
-            password: 'Pass@word1'
+            email: 'niranjan0881@gmail.com',
+            password: '123456'
         }
     });
 
