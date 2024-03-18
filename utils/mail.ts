@@ -15,3 +15,17 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 
     return response;
 };
+
+export const sendPasswordResetMail = async (email: string, token: string) => {
+    //TODO: read the domain from the env file
+    const confirmLink = `http://localhost:3000/auth/new-password?token=${token}`;
+
+    const response = await resend.emails.send({
+        from: 'onboading@resend.dev',
+        to: email,
+        subject: 'Reset your password',
+        html: `<p>Click <a href=${confirmLink}>here</a> to reset your password.</p>`
+    });
+
+    return response;
+};
