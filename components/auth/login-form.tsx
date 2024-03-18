@@ -10,6 +10,7 @@ import { Placeholder, defaultResponse } from '@/constants';
 import { LoginSchema } from '@/schemas';
 import { IFormResponse } from '@/types/component-props';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { FC, memo, useCallback, useMemo, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
@@ -65,6 +66,14 @@ export const LoginForm: FC = memo(() => {
 
                 />
             </FormControl>
+            <Button
+                variant="link"
+                asChild
+                size="sm"
+                className="px-0 font-normal"
+            >
+                <Link href="/auth/reset-password">Forgot Password?</Link>
+            </Button>
             <FormMessage />
         </FormItem>
     ), [isPending]);
