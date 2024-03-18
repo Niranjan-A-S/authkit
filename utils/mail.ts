@@ -6,26 +6,31 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     //TODO: read the domain from the env file
     const confirmLink = `http://localhost:3000/auth/new-verification?token=${token}`;
 
-    const response = await resend.emails.send({
+    return await resend.emails.send({
         from: 'onboading@resend.dev',
         to: email,
         subject: 'Confirm your email',
         html: `<p>Click <a href=${confirmLink}>here</a> to confirm email.</p>`
     });
 
-    return response;
 };
 
 export const sendPasswordResetMail = async (email: string, token: string) => {
     //TODO: read the domain from the env file
     const confirmLink = `http://localhost:3000/auth/new-password?token=${token}`;
 
-    const response = await resend.emails.send({
+    return await resend.emails.send({
         from: 'onboading@resend.dev',
         to: email,
         subject: 'Reset your password',
         html: `<p>Click <a href=${confirmLink}>here</a> to reset your password.</p>`
     });
 
-    return response;
 };
+
+export const sendTwoFactorToken = async (email: string, token: string) => await resend.emails.send({
+    from: 'onboarding@resend.dev',
+    to: email,
+    subject: '2FA code',
+    html: `<p>Your 2FA code is <strong>${token}</strong></p>`
+});
