@@ -1,13 +1,12 @@
 import { Role } from '@prisma/client';
-import 'next-auth';
-import 'next-auth/jwt';
+import { User } from 'next-auth';
+interface IExtendedUser extends User {
+    role: Role;
+}
 
 declare module 'next-auth' {
     interface Session {
-        user: {
-            role: Role
-            id: string
-        }
+        user: IExtendedUser
     }
 }
 
