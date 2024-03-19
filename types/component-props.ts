@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { IExtendedUser } from './next-auth';
+import { Role } from '@prisma/client';
 
 export interface IParentProps {
     children: ReactNode;
@@ -44,3 +45,7 @@ export interface IUserInfoItemProps {
     label: string;
     value: string;
 }
+
+export interface IRoleGateProps extends IParentProps {
+    allowedRole: Role;
+};
