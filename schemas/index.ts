@@ -10,6 +10,10 @@ export const LoginSchema = z.object({
     code: z.optional(z.string())
 });
 
+export const SettingSchema = z.object({
+    name: z.string().optional()
+});
+
 export const RegisterSchema = z.object({
     email: z.string().email({
         message: 'Email is Required'
