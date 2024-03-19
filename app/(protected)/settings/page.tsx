@@ -1,17 +1,9 @@
-import { auth, signOut } from '@/auth';
-import { Button } from '@/components/ui/button';
+'use client';
 
-export default async function SettingsPage() {
-    const session = await auth();
-    return <div>Current Session: {JSON.stringify(session)}
-        <form action={async () => {
-            'use server';
-            await signOut();
-        }}>
-            <Button
-                type="submit"
-                variant="destructive"
-            >Sign Out</Button>
-        </form>
-    </div>;
-}
+const SettingsPage = () => (
+    <div className="bg-white p-10 rounded-xl">
+        Settings Page
+    </div>
+);
+
+export default SettingsPage;
