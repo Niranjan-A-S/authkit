@@ -1,7 +1,6 @@
-import { Role } from '@prisma/client';
+import { Role, User as PrismaUser } from '@prisma/client';
 import { User } from 'next-auth';
-interface IExtendedUser extends User {
-    role: Role;
+interface IExtendedUser extends PrismaUser extends User {
 }
 
 declare module 'next-auth' {
@@ -12,6 +11,7 @@ declare module 'next-auth' {
 
 declare module 'next-auth/jwt' {
     interface JWT {
-        role?: Role
+        role: Role,
+        isTwoFactorEnabled: boolean;
     }
 }

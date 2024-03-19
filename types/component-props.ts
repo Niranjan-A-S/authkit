@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { IExtendedUser } from './next-auth';
 
 export interface IParentProps {
     children: ReactNode;
@@ -34,3 +35,12 @@ export interface IFormResponseProps {
     response: IFormResponse;
 }
 
+export interface IUserInfoProps {
+    user?: IExtendedUser | null; //TODO: fix this type error
+    label: string;
+}
+
+export interface IUserInfoItemProps {
+    label: string;
+    value: string;
+}
