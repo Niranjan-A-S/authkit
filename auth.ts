@@ -2,8 +2,9 @@ import authConfig from '@/auth.config';
 import { db } from '@/lib/db';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import NextAuth from 'next-auth';
-import { getUserById } from './utils/user';
-import { getTwoFactorConfirmationFromUserId } from './utils/two-factor-confirmation';
+import { getAccountByUserId } from './lib/account';
+import { getTwoFactorConfirmationFromUserId } from './lib/two-factor-confirmation';
+import { getUserById } from './lib/user';
 
 export const {
     handlers: { GET, POST },
@@ -47,6 +48,7 @@ export const {
                 session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as any;
                 session.user.name = token.name as any;
                 session.user.email = token.email as any;
+                session.user.isOAuth = token.isOAuth as boolean;
             }
 
             return session;
@@ -61,6 +63,9 @@ export const {
             token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
             token.email = existingUser.email;
             token.name = existingUser.name;
+
+            const existingAccount = await getAccountByUserId(existingUser.id);
+            token.isOAuth = !!existingAccount;
 
             return token;
         }
