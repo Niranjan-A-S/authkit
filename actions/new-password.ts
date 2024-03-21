@@ -2,9 +2,9 @@
 
 import { db } from '@/lib/db';
 import { NewPasswordSchema } from '@/schemas';
-import { generateHashedPassword } from '@/utils/hash';
-import { deletePasswordResetToken, getPasswordResetTokenFromToken } from '@/utils/password-reset-token';
-import { getUserByEmail } from '@/utils/user';
+import { generateHashedPassword } from '@/lib/hash';
+import { deletePasswordResetToken, getPasswordResetTokenFromToken } from '@/lib/password-reset-token';
+import { getUserByEmail } from '@/lib/user';
 import z from 'zod';
 
 export const newPassword = async (

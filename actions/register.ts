@@ -2,10 +2,10 @@
 
 import { db } from '@/lib/db';
 import { RegisterSchema } from '@/schemas';
-import { generateHashedPassword } from '@/utils/hash';
-import { sendVerificationEmail } from '@/utils/mail';
-import { getUserByEmail } from '@/utils/user';
-import { generateVerificationToken } from '@/utils/verification-token';
+import { generateHashedPassword } from '@/lib/hash';
+import { sendVerificationEmail } from '@/lib/mail';
+import { getUserByEmail } from '@/lib/user';
+import { generateVerificationToken } from '@/lib/verification-token';
 import z from 'zod';
 
 export const register = async (value: z.infer<typeof RegisterSchema>) => {

@@ -1,11 +1,11 @@
 
 import { LoginSchema } from '@/schemas';
-import { getUserByEmail } from '@/utils/user';
+import { getUserByEmail } from '@/lib/user';
 import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Github from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
-import { comparePasswords } from './utils/hash';
+import { comparePasswords } from './lib/hash';
 
 export default {
     providers: [

@@ -1,6 +1,7 @@
 import { Role, User as PrismaUser } from '@prisma/client';
 import { User } from 'next-auth';
 interface IExtendedUser extends PrismaUser extends User {
+    isOAuth: boolean;
 }
 
 declare module 'next-auth' {

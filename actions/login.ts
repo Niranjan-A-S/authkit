@@ -5,11 +5,11 @@ import { signIn } from '@/auth';
 import { db } from '@/lib/db';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 import { LoginSchema } from '@/schemas';
-import { sendTwoFactorToken, sendVerificationEmail } from '@/utils/mail';
-import { getTwoFactorConfirmationFromUserId } from '@/utils/two-factor-confirmation';
-import { generateTwoFactorToken, getTwoFactorTokenFromEmail } from '@/utils/two-factor-token';
-import { getUserByEmail } from '@/utils/user';
-import { generateVerificationToken } from '@/utils/verification-token';
+import { sendTwoFactorToken, sendVerificationEmail } from '@/lib/mail';
+import { getTwoFactorConfirmationFromUserId } from '@/lib/two-factor-confirmation';
+import { generateTwoFactorToken, getTwoFactorTokenFromEmail } from '@/lib/two-factor-token';
+import { getUserByEmail } from '@/lib/user';
+import { generateVerificationToken } from '@/lib/verification-token';
 import { AuthError } from 'next-auth';
 import z from 'zod';
 

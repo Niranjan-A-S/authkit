@@ -2,8 +2,8 @@
 
 import { db } from '@/lib/db';
 import { SettingSchema } from '@/schemas';
-import { getCurrentUser } from '@/utils/auth';
-import { getUserById } from '@/utils/user';
+import { getCurrentUser } from '@/lib/auth';
+import { getUserById } from '@/lib/user';
 import z from 'zod';
 
 export const updateSettings = async (values: z.infer<typeof SettingSchema>) => {
