@@ -1,12 +1,12 @@
 'use server';
 
 import { db } from '@/lib/db';
-import { SettingSchema } from '@/schemas';
+import { SettingsSchema } from '@/schemas';
 import { getCurrentUser } from '@/lib/auth';
 import { getUserById } from '@/lib/user';
 import z from 'zod';
 
-export const updateSettings = async (values: z.infer<typeof SettingSchema>) => {
+export const updateSettings = async (values: z.infer<typeof SettingsSchema>) => {
     const user = await getCurrentUser();
     if (!user) return {
         error: 'Unauthorized'

@@ -10,7 +10,7 @@ export const LoginSchema = z.object({
     code: z.optional(z.string())
 });
 
-export const SettingSchema = z.object({
+export const SettingsSchema = z.object({
     name: z.string().optional()
 });
 
