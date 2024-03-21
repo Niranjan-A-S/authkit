@@ -21,7 +21,7 @@ export const LoginForm: FC = memo(() => {
     const urlError = useMemo(() => (searchParams.get('error') === 'OAuthAccountNotLinked'
         ? 'Email already in use with different provider!'
         : ''), [searchParams]);
-
+    const callbackUrl = useMemo(() => searchParams.get('callbackUrl'), [searchParams]);
     const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
     const [isPending, startTransition] = useTransition();
     const [response, setResponse] = useState<IFormResponse>(
@@ -98,7 +98,7 @@ export const LoginForm: FC = memo(() => {
         setResponse(defaultResponse);
         startTransition(async () => {
             try {
-                const { error, success, twoFactor } = await login(values);
+                const { error, success, twoFactor } = await login(values, callbackUrl);
                 if (error) {
                     form.reset();
                     setResponse({ type: 'error', message: error });
@@ -117,7 +117,7 @@ export const LoginForm: FC = memo(() => {
                 // setResponse({ type: 'error', message: 'Something went wrong' });
             }
         });
-    }, [form]);
+    }, [callbackUrl, form]);
 
     return (
     <CardWrapper

@@ -13,7 +13,7 @@ import { generateVerificationToken } from '@/lib/verification-token';
 import { AuthError } from 'next-auth';
 import z from 'zod';
 
-export const login = async (value: z.infer<typeof LoginSchema>) => {
+export const login = async (value: z.infer<typeof LoginSchema>, callbackUrl?: string | null) => {
     const validatedFields = LoginSchema.safeParse(value);
     if (!validatedFields.success) return {
         error: 'Invalid email or password'
@@ -82,7 +82,7 @@ export const login = async (value: z.infer<typeof LoginSchema>) => {
         await signIn('credentials', {
             email,
             password,
-            redirectTo: DEFAULT_LOGIN_REDIRECT
+            redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT
         });
     } catch (error) {
         if (error instanceof AuthError) {
